@@ -22,7 +22,7 @@
 
 `python news_main_crawler.py`
 
-`./data/NewsLinkOutput.csv' 파일을 읽어드려 파일에 존재하는 뉴스 링크의 본문을 크롤링합니다. 
+`./data/NewsLinkOutput.csv` 파일을 읽어드려 파일에 존재하는 뉴스 링크의 본문을 크롤링합니다. 
 
 결과는 `./data/NewsMainOutput.csv`에 저장됩니다.
 
