@@ -29,7 +29,14 @@
 ### 주의할 점
 
 1. `news_link_crawler.py`가 먼저 실행된 이후에 `news_main_crawler.py` 실행 가능합니다.
+
 2. 뉴스 본문의 쉼표가 많기 때문에 `NewsMainOutput.csv` 파일의 delimiter는 `|` 이므로 결과를 읽을 때 주의하시기 바랍니다.
+
+   ```python
+   import pandas as pd
+   df = pd.read_csv('NewsMainOutput.csv', sep='|')
+   ```
+
 3. csv의 인코딩이 `utf-8`로 되어있기 때문에 윈도우에서 엑셀로 열 경우 한글이 깨져보일 수도 있습니다. 
 
 ## 설치
