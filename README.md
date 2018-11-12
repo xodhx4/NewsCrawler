@@ -45,7 +45,7 @@
 
    ```sh
    # git bash에서
-   git clone https://github.com/xodhx4/NewsCrawler
+   git clone https://github.com/xodhx4/NewsCrawler.git
    ```
 
 2. 필요 패키지 다운로드
