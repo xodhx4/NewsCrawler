@@ -84,9 +84,8 @@ class NewsMainCrawler(threading.Thread):
                     main = soup.get_text()
                     mylogger.info(
                         f"Reload in {self.num} | {self.press} | {self.link}")
-                if (type(main) != str) print(type(main))
             # 줄바꿈 빈칸으로 교체
-            self.main = main.replace('\n', " ")
+            self.main = main.replace('\r',"").replace('\n',"")
 
         except Exception as e:
             # 크롤링 과정에서 오류 발생시 에러문 로깅
