@@ -158,6 +158,7 @@ class NaverNewsLinkCrawler(threading.Thread):
             soup = BeautifulSoup(html, 'html.parser')
 
             # 필요한 부분 파싱
+            # FIXME : 현재 홈페이지가 바뀌어 파싱이 안되는 것으로 판단됩니다. 변경이 필요합니다.
             news_articles = soup.find_all('a', {'class': "news_wrap"})
             self.news_list = [NewsWrapper(wrapper).parsing()
                               for wrapper in news_articles]
