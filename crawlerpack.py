@@ -55,13 +55,20 @@ class NewsMainCrawler(threading.Thread):
         try:
             # 네이버에 request를 보냄
             response = requests.get(link, headers=headers)
+            encoding = response.encoding
 
             # response를 받을 시 로그 남김
             mylogger.info(
                 f"{self.num} | {self.press} requests get, {self.title}")
 
             # soup 객체로 파싱
+            # 실제 한글이 euc-kr인코딩일 시 jsp에서 서버쪽의 오류로 ISO-8859-1로 보내는 경우가 있다고함
+            # 이를 위해 올바른 인코딩으로 교체
+            if encoding == "ISO-8859-1":
+                response.encoding = 'euc-kr'
             html = response.text
+            print(response.encoding)
+            
             soup = BeautifulSoup(html, 'html.parser')
             entertainment = "https://m.entertain.naver.com"
             news = "https://m.news.naver.com"
@@ -156,10 +163,11 @@ class NaverNewsLinkCrawler(threading.Thread):
             mylogger.info(f"{self.num} | {self.keyword} requests get")
             html = response.text
             soup = BeautifulSoup(html, 'html.parser')
+            # mylogger.info(soup)
 
             # 필요한 부분 파싱
             # FIXME : 현재 홈페이지가 바뀌어 파싱이 안되는 것으로 판단됩니다. 변경이 필요합니다.
-            news_articles = soup.find_all('a', {'class': "news_wrap"})
+            news_articles = soup.find_all('div', {'class': "news_wrap"})
             self.news_list = [NewsWrapper(wrapper).parsing()
                               for wrapper in news_articles]
         except Exception as e:
@@ -188,14 +196,23 @@ class NewsWrapper(object):
 
     def __init__(self, wrapper):
         self.wrapper = wrapper
+        # mylogger.info("NewsWrapper")
+        # mylogger.info(wrapper)
 
     def parsing(self):
         """주어진 wapper에서 정보 파싱하여 list로 만들어 return"""
-        link = self.wrapper.get('href')
-        title = self.wrapper.find('div', {'class': 'news_tit'}).text
-        time = self.wrapper.find('span', {'class': 'sub_txt sub_time'}).text
-        press = self.wrapper.find('cite', {'class': 'sub_txt'}).text
-        naver = "https://m.news.naver.com"
+        try:
+            link = self.wrapper.find('a', {'class':'news_tit'})['href']
+            mylogger.info(link)
+            title = self.wrapper.find('div', {'class': 'api_txt_lines tit'}).text
+            mylogger.info(title)
+            time = self.wrapper.find('span', {'class': 'sub_txt sub_time'}).text
+            mylogger.info(time)
+            press = self.wrapper.find('cite', {'class': 'sub_txt'}).text
+            mylogger.info(press)
+            naver = "https://m.news.naver.com"
+        except:
+            mylogger.error(self.wrapper)
 
         # 네이버 뉴스인지 아닌지 추가
         if link[:len(naver)] == naver:
