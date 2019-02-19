@@ -15,7 +15,7 @@ def main_crawl(numThread=15):
     with open('data/NewsLinkOutput.csv', 'r', encoding='utf-8') as csvinput:
         # NewsMainOutput.csv 파일을 만듭니다.
         with open('data/NewsMainOutput.csv', 'w', encoding='utf-8', newline='\n') as csvoutput:
-            readcsv = csv.reader(csvinput)
+            readcsv = csv.reader(csvinput, delimiter='|')
             # NewsMainOutput.csv 파일의 delimeter는 ','가 아닌 '|'임에 주의합니다.
             # 뉴스 본문에 쉼표가 많은 | 로 delimeter를 설정하였습니다.
             writecsv = csv.writer(csvoutput, delimiter='|')
@@ -28,7 +28,7 @@ def main_crawl(numThread=15):
             # 크롤러 멀티쓰레드를 만들고 실행합니다
             print("Crawling Start")
             for i, item in enumerate(readcsv):
-                info_crawler = crawlerpack.NewsMainCrawler(writecsv, i, item, numThread)
+                info_crawler = crawlerpack.NewsMainCrawler(writecsv, i, item, numThread, onlyNaver=True)
                 info_crawler.daemon = True
                 info_crawler.start()
                 sleep(0.1)

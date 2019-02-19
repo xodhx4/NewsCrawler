@@ -30,7 +30,7 @@
 
 1. `news_link_crawler.py`가 먼저 실행된 이후에 `news_main_crawler.py` 실행 가능합니다.
 
-2. 뉴스 본문의 쉼표가 많기 때문에 `NewsMainOutput.csv` 파일의 delimiter는 `|` 이므로 결과를 읽을 때 주의하시기 바랍니다.
+2. 뉴스 본문의 쉼표가 많기 때문에 `NewsLinkOutput.csv`, `NewsMainOutput.csv` 파일의 delimiter는 `|` 이므로 결과를 읽을 때 주의하시기 바랍니다.
 
    ```python
    import pandas as pd

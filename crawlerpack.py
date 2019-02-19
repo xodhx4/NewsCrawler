@@ -18,7 +18,7 @@ class NewsMainCrawler(threading.Thread):
         threading (Thread): 멀티쓰레딩 클래스를 구현하기 위한 부모 클래스
     """
 
-    def __init__(self, csvfile, num, item, numThread=15):
+    def __init__(self, csvfile, num, item, numThread=15, onlyNaver=False):
         """생성자 설정
 
         Args:
@@ -37,6 +37,7 @@ class NewsMainCrawler(threading.Thread):
         self.time = item[2]
         self.press = item[3]
         self.isNaver = item[4]
+        self.onlyNaver= onlyNaver
 
         # 실제 사용자 처럼 보이기 위한 해더 추가
         self.header = {"Referer": self.link,
@@ -80,7 +81,7 @@ class NewsMainCrawler(threading.Thread):
             elif response.url[:len(news)] == news:
                 main = soup.find('div', {'id': 'dic_area'}).text
             # 다른 신문사 뉴스일 시 파싱
-            else:
+            elif not self.onlyNaver:
                 for script in soup(["script", "style"]):
                     script.decompose()
                 try:
@@ -91,6 +92,8 @@ class NewsMainCrawler(threading.Thread):
                     main = soup.get_text()
                     mylogger.info(
                         f"Reload in {self.num} | {self.press} | {self.link}")
+            else:
+                main = ""
             # 줄바꿈 빈칸으로 교체
             self.main = main.replace('\r',"").replace('\n',"")
 
@@ -101,6 +104,8 @@ class NewsMainCrawler(threading.Thread):
 
     def run(self):
         """멀티쓰레드로 실행되는 함수"""
+        if self.onlyNaver and not self.isNaver:
+            return
         # 클레스의 파라미터로 주어진 numThread에 맞게 thread 수 설정
         self.threadLimiter.acquire()
         try:

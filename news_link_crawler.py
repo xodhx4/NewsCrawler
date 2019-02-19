@@ -17,7 +17,7 @@ def link_crawl(KEYWORD, numThread=15):
     """
     with open('data/NewsLinkOutput.csv', 'w', encoding='utf-8', newline='\n') as csvoutput:
         # csv 파일 생성 후 첫 줄 만들기
-        writecsv = csv.writer(csvoutput)
+        writecsv = csv.writer(csvoutput, delimiter='|')
         row0 = ['link', 'title', 'time', 'press', 'isNaver']
         writecsv.writerow(row0)
 
